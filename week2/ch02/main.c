@@ -39,6 +39,7 @@ int getTreeHeight(struct BinaryNode* root)
 
 }
 //拷贝具体实现
+
 struct BinaryNode* copyBinaryTree(struct BinaryNode * root)
 {
 	if (root == NULL)
@@ -67,6 +68,20 @@ void showBinaryTree(struct BinaryNode* root)
 	printf("%c", root->ch);
 	showBinaryTree(root->lChild);
 	showBinaryTree(root->rChild);
+}
+//释放树
+void freeTree(struct BinaryNode*root)
+{if (root==NULL)
+{
+	return;
+}
+//先释放左子树
+freeTree(root->lChild);
+//再释放右子树
+freeTree(root->rChild);
+printf("%c被释放了\n", root->ch);
+//释放根节点
+free(root);
 }
 
 
@@ -97,10 +112,12 @@ void test01()
 	printf("叶子数量为：%d\n", num);
 
 	int height = getTreeHeight(&nodeA);
-        printf("树的高度为：%d\n", height);
-	//拷贝二叉树
-	struct BinaryNode* newTree = copyBinaryTree(&nodeA);
+		printf("树的高度为：%d\n", height);
+		//拷贝二叉树
+		struct BinaryNode* newTree = copyBinaryTree(&nodeA);
 	showBinaryTree(newTree);
+		//释放二叉树
+		freeTree(newTree);
 
 }
 
