@@ -38,7 +38,43 @@ int getTreeHeight(struct BinaryNode* root)
 
 
 }
- void test01()
+//拷贝具体实现
+struct BinaryNode* copyBinaryTree(struct BinaryNode * root)
+{
+	if (root == NULL)
+	{
+		return NULL;
+	}
+	//先拷贝左子树
+	struct BinaryNode* lChild = copyBinaryTree(root->lChild);
+	//再拷贝右子树
+	struct BinaryNode* rChild = copyBinaryTree(root->rChild);
+	//创建新节点
+	struct BinaryNode* newNode = malloc(sizeof(struct BinaryNode));
+	newNode->lChild = lChild;
+	newNode->rChild = rChild;
+	newNode->ch = root->ch;
+	//返回给用户
+	return newNode;
+}
+//遍历树
+void showBinaryTree(struct BinaryNode* root)
+{
+	if (root == NULL)
+	{
+		return;
+	}
+	printf("%c", root->ch);
+	showBinaryTree(root->lChild);
+	showBinaryTree(root->rChild);
+}
+
+
+
+
+	
+
+void test01()
 {
 	struct BinaryNode nodeA = { 'A',NULL,NULL };
 	struct BinaryNode nodeB = { 'B',NULL,NULL };
@@ -61,13 +97,17 @@ int getTreeHeight(struct BinaryNode* root)
 	printf("叶子数量为：%d\n", num);
 
 	int height = getTreeHeight(&nodeA);
-		printf("树的高度为：%d\n", height);
+        printf("树的高度为：%d\n", height);
+	//拷贝二叉树
+	struct BinaryNode* newTree = copyBinaryTree(&nodeA);
+	showBinaryTree(newTree);
+
 }
+
 int main()
 {
 	test01();
 	system("pause");
 	return EXIT_SUCCESS;
 }
-
 
