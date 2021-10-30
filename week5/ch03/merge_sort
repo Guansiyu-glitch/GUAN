@@ -1,0 +1,86 @@
+//归并排序
+#include<stdlib.h>
+#include<stdio.h>
+//辅助函数，打印数组
+void print_arr(int arr[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("%d", arr[i]);
+	}
+	putchar('\n');
+}
+//归并排序
+void msort(int arr[], int tempArr[], int left, int right)
+{
+	int Center;
+	//只有一个元素的话，就不需要继续划分
+	if (left < right)
+	{
+		//找中间点
+		Center = (left + right) / 2;
+		//递归划分左右半区
+		msort(arr, tempArr, left, Center);
+		msort(arr, tempArr, Center + 1, right);
+		merge(arr, tempArr, left, Center, right);
+
+	}
+ }
+// 合并(关键代码！)
+int merge(int arr[], int tempArr[], int left, int Center, int right)
+{
+	//标记左半区第一个未排序的元素
+	int l_pos = left;
+	//标记右半区第一个未排序的元素
+	int r_pos = Center + 1;
+	//临时数组元素下标
+	int tmp_pos = left;
+	//合并
+	while (l_pos <= Center && r_pos <= right)
+	{
+		if (arr[l_pos] < arr[r_pos])//左半区第一个剩余元素更小
+			tempArr[tmp_pos++] = arr[l_pos++];
+		else
+			tempArr[tmp_pos++] = arr[r_pos++];
+
+	}
+	//合并左半区剩余元素
+	while (l_pos <= Center)
+		tempArr[tmp_pos++] = arr[l_pos++];
+	//合并右半区剩余元素
+	while (r_pos <= right)
+		tempArr[tmp_pos++] = arr[r_pos++];
+	//把临时数组中合并后的元素复制回原来数组
+	while (left <= right)
+	{
+		arr[left] = tempArr[left];
+		left++;
+	}
+
+}
+//归并排序入口
+void merge_sort(int arr[], int n)
+{
+	//分配一个辅助数组
+	int* tempArr = (int*)malloc(n * sizeof(int));
+	if (tempArr)//辅助数组分配成功
+	{
+		msort(arr, tempArr, 0, n - 1);
+		free(tempArr);//释放辅助数组
+	}
+	else
+	{
+		printf("error:内存分配失败！");
+	}
+}
+
+int main(int argc, char const* argv[])
+{
+	int arr[] = { 9,5,2,7,12,4,3,1,11 };
+	int n = 9;
+	print_arr(arr, n);
+	merge_sort(arr, n);
+	print_arr(arr, n);
+	return 0;
+}
+
